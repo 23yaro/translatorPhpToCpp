@@ -808,7 +808,9 @@ class LecAnalysis():
         return out_seq
 
     #Лаба 4
+    error_count = 0
     def error(self):
+        self.error_count += 1
         print(self.nxtsymb,self.row_counter,22222)
         out_sq = 'Ошибка в строке '
         f = open('./files/error.txt', 'a')
@@ -817,6 +819,7 @@ class LecAnalysis():
         f.close()
         return
     def program(self):
+        self.error_count = 0
         self.scan()
         if(self.nxtsymb!='<?'):
             self.error()
@@ -827,6 +830,9 @@ class LecAnalysis():
         self.text()
         if(self.nxtsymb!='?>'):
             self.error()
+        f = open('./files/error.txt', 'a')
+        f.write("Процедура завершена. Ошибок: "  + str(self.error_count)  + '\n')
+        f.close()
 
 
     def text(self):

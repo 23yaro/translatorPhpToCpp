@@ -1,6 +1,5 @@
 <?php
-$b="aaaaaaaa";
-echo("aaaaaa".$b)
+$b="aaaaaaaa"
 function f($x,$y){
     $a=1;
     function ar(){
