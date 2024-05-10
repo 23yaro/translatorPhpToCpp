@@ -649,13 +649,13 @@ class LecAnalysis():
                 self.tokens.update(data)
         # лексемы (значение-код)
         inverse_tokens = {val: key for key, val in self.tokens.items()}
-        replace = {'echo': 'print', '=': '<-', '!=': '!=',
-                   '==': '==', '/': '/', '%': '%%','>':'>','>=':'>=','<':'<','<=':'<=',
-                   '$':'','.':'paste(','+':'+','-':'-','*':'*','**':'**',
-                    '^':'bitwXor(','&':'bitwAnd(','|':'bitwOr(','~':'bitwNot(','<<':'bitwShiftL(','>>':'bitwShiftR(',
-                   'and':'&&','or':'||','xor':'xor(','!': '!',
-                   'true':'TRUE','false':'FALSE','null':'NULL',
-                   'do':'repeat','array':'c'
+        replace = {'echo': 'print', '=': '=', '!=': '!=',
+                   '==': '==', '/': '/', '%': '%','>':'>','>=':'>=','<':'<','<=':'<=',
+                   '$':'','.':'.','+':'+','-':'-','*':'*','**':'**',
+                    '^':'^','&':'&','|':'|','~':'~','<<':'<<','>>':'>>',
+                   'and':'&&','or':'||','xor':'xor','!': '!',
+                   'true':'true','false':'false','null':'null',
+                   'do':'do','array':'array'
         }
         # файл, содержащий обратную польскую запись
         f = open('./files/reverse_polsk.txt', 'r')
