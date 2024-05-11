@@ -124,7 +124,7 @@
            </font>
           </property>
           <property name="text">
-           <string>Перевод в Php</string>
+           <string>Перевод в Cpp</string>
           </property>
          </widget>
         </item>

@@ -748,7 +748,7 @@ class LecAnalysis():
                     out_seq += '\t' * tub_num + '}\n'
                     tub_num -= 1
                 elif (t[i - 1] in self.do_start_marks):
-                    out_seq += '\t' * tub_num + 'repeat{\n'
+                    out_seq += '\t' * tub_num + 'do{\n'
                     tub_num += 1
             elif t[i] == 'echo':
                 arg1 = stack.pop()

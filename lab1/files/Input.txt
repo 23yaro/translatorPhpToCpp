@@ -14,37 +14,4 @@ function f2($x,$y){
     $a=1;
     return $a;
 }
-function f3($x,$y){
-    $a=1;
-    if ($b<$a){
-$b= $b+100;
-}
-    return $a;
-}
-function f4($x,$y){
-    while ($a<10){
-    $a=1;
-    }
-        if ($b<$a){
-$b= $b+100;
-}
-    return $a;
-}
-function f5($x,$y){
-    $a=1;
-    return $a;
-}
-function f6($x,$y){
-    $a=1;
-    return $a;
-}
-function f7($x,$y){
-    $a=1;
-    return $a;
-}
-function f8($x,$y){
-    $a=1;
-    return $a;
-}
-$a=$a+1;
 ?>
