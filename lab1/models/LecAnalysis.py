@@ -690,6 +690,8 @@ class LecAnalysis():
         # print(self.while_end_marks)
         # print(self.do_start_marks)
         # print(self.do_end_marks)
+        out_seq += 'using namespace std;\n'
+        out_seq += 'void main(){\n'
         while i < len(t):
             # print(out_seq)
             print(stack)
@@ -708,103 +710,104 @@ class LecAnalysis():
                 stack.pop()
                 stack.pop()
                 func_name = stack.pop()
-                out_seq += '\t'*tub_num + func_name.split('(')[0]+'=function('+func_name.split('(')[1]
+                out_seq += '\t' * tub_num + func_name.split('(')[0] + '(' + func_name.split('(')[1]
                 tub_num = tub_num + 1
                 is_func = True
             elif t[i] == 'КП':
-                tub_num-=1
-                out_seq += '\t'*tub_num+ '}\n'
-            elif t[i]=='return':
+                tub_num -= 1
+                out_seq += '\t' * tub_num + '}\n'
+            elif t[i] == 'return':
                 result = stack.pop()
-                out_seq+='\t'*tub_num+'return('+result+');\n'
+                out_seq += '\t' * tub_num + 'return(' + result + ');\n'
             elif t[i] == 'УПЛ':
-                if(t[i-1] in self.while_end_marks):
+                if (t[i - 1] in self.while_end_marks):
                     arg1 = stack.pop()
-                    out_seq += '\t'*tub_num+f'while({arg1})' + '{\n'
+                    out_seq += '\t' * tub_num + f'while({arg1})' + '{\n'
                     tub_num += 1
-                elif(t[i-1] in self.else_marks):
+                elif (t[i - 1] in self.else_marks):
                     stack.pop()
                     arg1 = stack.pop()
-                    out_seq += '\t'*tub_num+f'if ({arg1})' + '{\n'
+                    out_seq += '\t' * tub_num + f'if ({arg1})' + '{\n'
                     tub_num += 1
                 elif (t[i + 1] in self.do_start_marks):
                     arg1 = stack.pop()
-                    out_seq += '\t'*tub_num+f'if ({arg1})' + '{break;}\n}\n'
+                    out_seq += '\t' * tub_num + f'if ({arg1})' + '{break;}\n}\n'
                     tub_num -= 1
             elif t[i] == 'БП':
                 if (t[i - 1] in self.while_start_marks):
-                    out_seq += '\t'*tub_num+'}\n'
-                    tub_num -= 1
-                elif (t[i - 1] in self.if_marks):
-                    out_seq += '\t'*tub_num+'}\nelse{\n'
-                    out_seq = out_seq
-            elif t[i] == ':':
-                if(t[i-1] in self.end_marks):
                     out_seq += '\t' * tub_num + '}\n'
                     tub_num -= 1
-                elif(t[i-1] in self.if_marks):
-                    out_seq+='\t'*tub_num+'}\n'
-                    tub_num-=1
-                elif(t[i-1] in self.do_start_marks):
-                    out_seq+='\t'*tub_num+'repeat{\n'
-                    tub_num+=1
-            elif t[i]=='echo':
-                arg1=stack.pop()
-                out_seq+='\t'*tub_num+f'print({arg1});\n'
-            elif is_operation(t[i]):
-                if t[i]=='$':
+                elif (t[i - 1] in self.if_marks):
+                    out_seq += '\t' * tub_num + '}\nelse{\n'
                     out_seq = out_seq
-                elif t[i]=='.' and len(stack)>=2:
-                    arg1=stack.pop()
-                    arg2=stack.pop()
-                    out_seq += '\t'*tub_num+f'Rp{variable}='+f'paste({arg2},{arg1},sep="");\n'
+            elif t[i] == ':':
+                if (t[i - 1] in self.end_marks):
+                    out_seq += '\t' * tub_num + '}\n'
+                    tub_num -= 1
+                elif (t[i - 1] in self.if_marks):
+                    out_seq += '\t' * tub_num + '}\n'
+                    tub_num -= 1
+                elif (t[i - 1] in self.do_start_marks):
+                    out_seq += '\t' * tub_num + 'repeat{\n'
+                    tub_num += 1
+            elif t[i] == 'echo':
+                arg1 = stack.pop()
+                out_seq += '\t' * tub_num + f'cout <<({arg1});\n'
+            elif is_operation(t[i]):
+                if t[i] == '$':
+                    out_seq = out_seq
+                elif t[i] == '.' and len(stack) >= 2:
+                    arg1 = stack.pop()
+                    arg2 = stack.pop()
+                    out_seq += '\t' * tub_num + f'Rp{variable}=' + f'paste({arg2},{arg1},sep="");\n'
                     stack.append(f'Rp{variable}')
-                    variable+=1
+                    variable += 1
                 elif t[i] == '=' and len(stack) >= 2:
                     arg1 = stack.pop()
                     arg2 = stack.pop()
-                    out_seq += '\t'*tub_num+ f'{arg2} <- {arg1};\n'
+                    out_seq += '\t' * tub_num + f'{arg2} = {arg1};\n'
                 else:
                     operation = replace[t[i]] if t[i] in replace else t[i]
                     arg1 = stack.pop()
                     if t[i] != '!':
                         arg2 = stack.pop()
-                        out_seq+='\t'*tub_num+f'Rp{variable}='+f'({arg2} {operation} {arg1});\n'
+                        out_seq += '\t' * tub_num + f'Rp{variable}=' + f'({arg2} {operation} {arg1});\n'
                         stack.append(f'Rp{variable}')
-                        variable+=1
+                        variable += 1
                     else:
                         stack.append(f'({operation}{arg1})')
-            elif re.match("[0-9]+АЭМ",t[i]):
+            elif re.match("[0-9]+АЭМ", t[i]):
                 k = int(t[i].split('АЭМ')[0])
                 a = []
                 while k != 0:
                     a.append(stack.pop())
                     k -= 1
                 a.reverse()
-                stack.append('\t'*tub_num + a[0] + '[' + ','.join(a[1:]) + ']')
+                stack.append('\t' * tub_num + a[0] + '[' + ','.join(a[1:]) + ']')
             elif t[i] in ['break', 'continue']:
                 stack.append(replace[t[i]] if t[i] in replace else t[i])
                 arg0 = stack.pop()
-                out_seq += '\t'*tub_num + f'\t{arg0};\n'
+                out_seq += '\t' * tub_num + f'\t{arg0};\n'
 
-            elif re.match(r"[0-9]+Ф",t[i]):
+            elif re.match(r"[0-9]+Ф", t[i]):
                 k = int(t[i].split('Ф')[0])
                 a = []
                 while k != 0:
                     a.append(stack.pop())
                     k -= 1
                 a.reverse()
-                if(i<len(t)-3 and t[i+3]!='НП'):
-                    out_seq+='\t'*tub_num+f"Rp{variable}="+a[0]+'(' + ', '.join(a[1:]) + ');\n'
+                if (i < len(t) - 3 and t[i + 3] != 'НП'):
+                    out_seq += '\t' * tub_num + f"Rp{variable}=" + a[0] + '(' + ', '.join(a[1:]) + ');\n'
                     stack.append(f"Rp{variable}")
-                    variable+=1
+                    variable += 1
                 else:
-                    stack.append(a[0]+'(' + ', '.join(a[1:]) + ')')
+                    stack.append(a[0] + '(' + ', '.join(a[1:]) + ')')
             else:
                 stack.append(t[i])
             i += 1
 
         stack.clear()
+        out_seq += '}'
         return out_seq
 
     #Лаба 4
